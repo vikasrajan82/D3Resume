@@ -279,13 +279,10 @@ function displayHelpSection() {
 
     var infoDivWidth = 200,
         hackathonStartDate = new Date(allEvents[0].eventDate.getFullYear() - 6, allEvents[0].eventDate.getMonth(), allEvents[0].eventDate.getDate()),
-        certificateStartDate = new Date(allEvents[1].eventDate.getFullYear() - 2, allEvents[1].eventDate.getMonth(), allEvents[1].eventDate.getDate()),
         infoProjectTop = (timelineyStart + 150),
         infoProjectLeft = (tdLeftWidth + yearScale(employmentDetails[0].start) + (yearScale(employmentDetails[0].end) - yearScale(employmentDetails[0].start) - infoDivWidth) / 2),
         infoHackathonLeft = tdLeftWidth + yearScale(hackathonStartDate),
-        infoHackathonTop = (timelineyStart + 100),
-        infoCertificatesTop = (timelineyStart - 100),
-        infoCertificatesLeft = tdLeftWidth + yearScale(certificateStartDate) - infoDivWidth / 2;
+        infoHackathonTop = (timelineyStart + 100);
 
     if (document.getElementById("group_" + pageNames[2].id)) {
         d3.select("body")
@@ -310,17 +307,24 @@ function displayHelpSection() {
 
         drawArrow([[(infoHackathonLeft + infoDivWidth + 30), infoHackathonTop + 40], [(tdLeftWidth + allEvents[0].xCordinate), (allEvents[0].yCordinate + 20)]]);
 
-        d3.select("body")
-            .append("div")
-            .attr("class", "helpText")
-            .style("top", infoCertificatesTop + "px")
-            .style("left", infoCertificatesLeft + "px")
-            .style("width", infoDivWidth + "px")
-            .style("position", "absolute")
-            .text("Click here to view the certificates");
+        if (allEvents.length > 1) {
+            var certificateStartDate = new Date(allEvents[1].eventDate.getFullYear() - 2, allEvents[1].eventDate.getMonth(), allEvents[1].eventDate.getDate()),
+                infoCertificatesTop = (timelineyStart - 100),
+                infoCertificatesLeft = tdLeftWidth + yearScale(certificateStartDate) - infoDivWidth / 2;
 
-        drawArrow([[(infoCertificatesLeft + infoDivWidth / 2 - 40), infoCertificatesTop + 70], [(tdLeftWidth + allEvents[1].xCordinate), (allEvents[1].yCordinate + 20)]]);
-    }
+            d3.select("body")
+                .append("div")
+                .attr("class", "helpText")
+                .style("top", infoCertificatesTop + "px")
+                .style("left", infoCertificatesLeft + "px")
+                .style("width", infoDivWidth + "px")
+                .style("position", "absolute")
+                .text("Click here to view the certificates");
+
+            drawArrow([[(infoCertificatesLeft + infoDivWidth / 2 - 40), infoCertificatesTop + 70], [(tdLeftWidth + allEvents[1].xCordinate), (allEvents[1].yCordinate + 20)]]);
+
+        }
+     }
 
     if (document.getElementById("group_" + pageNames[1].id)) {
 
@@ -399,7 +403,7 @@ function displayHelpSection() {
 
 
 function showPersonalDetailsOption(svg) {
-    personalDetailsPositionX = yearScale(new Date(2017, 02, 25));
+    personalDetailsPositionX = yearScale(new Date(2022, 02, 25));
     personalDetailsPositionY = yStart + 35;
     var perCont = svg.append("g")
        .attr("transform", "translate(" + personalDetailsPositionX + "," + personalDetailsPositionY + ")"),
@@ -869,7 +873,7 @@ function plotTotalWorkExperience(svg, startDate, cy) {
         .transition()
         .duration(500)
         .delay(4000)
-        .text("Total Experience: 14 Years");
+        .text("Total Experience: 17 Years");
 }
 
 function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cutOffHeight) {
@@ -1670,7 +1674,7 @@ function drawEmploymentArea(svg, cy) {
         id: "OracleWork"
     }, {
         start: new Date(2013, 01, 11),
-        end: new Date(),
+        end: new Date(2020, 03, 30),
         color: "rgb(171,196,161)",
         titleBuffer: -45,
         companyName: "MICROSOFT SERVICES (INDIA).",
@@ -1715,7 +1719,43 @@ function drawEmploymentArea(svg, cy) {
             percentage: 30
         }],
         id: "MsWork"
-    }];
+        },
+        {
+            start: new Date(2020, 04, 01),
+            end: new Date(),
+            color: "rgb(104,167,173)",
+            titleBuffer: 0,
+            companyName: "MICROSOFT IDC.",
+            jobTitle: "SR. SOFTWARE ENGINEER",
+            jobLocation: "Bengluru, KA, India",
+            location: "Bengluru, Karnataka, India",
+            responsibilities: ["Leading the development of Incentive Claims Management", "Business Requirement Analysis", "Framework design and implementation", "Code review"],
+            projects: [{
+                name: "Incentive Claims Management",
+                client: "Surface Pricing Team",
+                duration: "May 2020 - Present",
+                technology: "Dynamics 365, C#, WebApi, JQuery",
+                description: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Incentive Claims Management system allows Microsoft Distributors and Resellers worldwide to manage the deals with their customers. It is a single platform to create and claim incentives for the approved deals based on volume and per unit cost. A fully managed service offering is being provided by leveraging Microsoft Cloud Technologies like Microsoft Dynamics 365 & Microsoft Azure."
+
+            }],
+            skills: [{
+                name: "C#",
+                percentage: 80
+            }, {
+                name: "Dynamics 365",
+                percentage: 80
+            }, {
+                name: "D3.js",
+                percentage: 40
+            }, {
+                name: "JavaScript",
+                percentage: 70
+            }, {
+                name: "Azure Data Factory(ADF)",
+                percentage: 60
+            }],
+            id: "MsIDCWork"
+        }    ];
     var cirRadius = 5,
         startOfLine = cy - 26,
         endOfLine = cy - 140,
@@ -2032,7 +2072,7 @@ function drawSummaryPage() {
             eventDate: new Date(2014, 08, 01),
             desc: "Participated in the Hackathon Event to create \"Lync Extension For Dynamics CRM\"",
             isPdf: false
-        },
+        }/*,
         {
             eventDate: new Date(2015, 09, 13),
             desc: "Completed certification for \"Developing Microsoft Azure Solutions\"",
@@ -2045,7 +2085,7 @@ function drawSummaryPage() {
             desc: "Completed certification for \"Microsoft Dynamics CRM 2016 Online Deployment\"",
             isPdf: true,
             url: "Cert_DynamicsCRM2016Online.pdf"
-        }
+        }*/
     ];
 
     removeClickEvent(summaryPageName);
@@ -2265,14 +2305,14 @@ function plotMySkillSet() {
         skill: "C#",
         skillId: "CSharp",
         percentage: 70,
-        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018",
+        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022",
         yearsRange: "2004-Present",
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I was always interested in OOPs programming since the start of coding days (during early college years). I started with PASCAL, C, C++ before making a full-time transition to C#. Though all the projects that I have worked on so far had C# or VB.NET as the back-end language, I would like to make a special mention of SAR and Texas WIC. These are projects that involved a major refactoring of the design framework and I was fortunate enough to have been part of those."
     }, {
         skill: "JavaScript",
         skillId: "Javascript",
         percentage: 80,
-        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018",
+        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022",
         yearsRange: "2004-Present",
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;What is web-development without JavaScript? I was always fascinated with the power of JavaScript. Still remember writing my own code using xmlHttpRequest which is now usually hidden under wrapper frameworks like jquery, angular, etc. I was involved in developing several reusable plugins like Auto-Complete, Editable Grids, Expandable Grids, Outlook, etc. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Somehow the client-side development always interested me more than the server-side development. It could be this interest that has made me to side-line always with web-based projects throughout my career. "
     }, /*{
@@ -2312,15 +2352,15 @@ function plotMySkillSet() {
     }, {
         skill: "Azure",
         skillId: "Azure",
-        yearsUsed: "2015,2016,2017,2018",
+        yearsUsed: "2015,2016,2017,2018,2019,2020,2021,2022",
         yearsRange: "2015-2018",
         percentage: 40,
-        tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last 3 years, I have been invovled in the development of various components within Microsoft Azure (eg: Cloud Service, Application Insights and Schedulers). As part of my recent project, I had developed an Azure Cloud Service that was responsible for executing several tasks in a batch module. An Azure Scheduler was later configured to invoke the worker service at stipulated intervals.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Azure Service was robust in the sense that it had retry and detailed error logging mechanism. All the logs were pushed to either application insights or to CRM. This allowed the administrators for a quick snapshot of each execution status without having to log into the Azure Portal."
+        tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last 3 years, I have been involved in the development of various components within Microsoft Azure (eg: Cloud Service, Application Insights and Schedulers). As part of my recent project, I had developed an Azure Cloud Service that was responsible for executing several tasks in a batch module. An Azure Scheduler was later configured to invoke the worker service at stipulated intervals.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Azure Service was robust in the sense that it had retry and detailed error logging mechanism. All the logs were pushed to either application insights or to CRM. This allowed the administrators for a quick snapshot of each execution status without having to log into the Azure Portal."
     }, {
-        skill: "MS CRM 2013/2015",
+        skill: "Dynamics 365/ PowerApps",
         skillId: "MSCRM",
         percentage: 90,
-        yearsUsed: "2013,2014,2015,2016,2017,2018",
+        yearsUsed: "2013,2014,2015,2016,2017,2018,2019,2020,2021,2022",
         yearsRange: "2013-Present",
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Before joining Microsoft, I was working on .NET and web-based technologies for around 8 years. I was looking for a shift to a new domain & technology and that’s when this opportunity to work for Microsoft came by. I have been working on Microsoft Dynamics CRM for the last 5 years. I started with CRM 2011 and soon graduated to 2016/Dynamics 365. During my tenure here in Microsoft, I have worked with several noteworthy clients like NEC, Wipro Technologies, HT Media, etc. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last two years, I have been engaged with a project for Texas WIC (Women, Infant & Children). The solution helps to efficiently manage the applicants and participants of this program. The system should allow applicants to be enrolled to the program provided they meet the stipulated eligibility guidelines."
 
@@ -2572,6 +2612,11 @@ function drawSkillPercentage(svg, x, y, percentage, skillName, id) {
             colorCode = d3.scale.linear().domain([1, 100])
                         .interpolate(d3.interpolateHcl)
                         .range([d3.rgb("rgb(171,196,161)"), d3.rgb('rgb(171,196,161)')]);
+            break;
+        case "MsIDCWork":
+            colorCode = d3.scale.linear().domain([1, 100])
+                .interpolate(d3.interpolateHcl)
+                .range([d3.rgb("rgb(104,167,173)"), d3.rgb('rgb(104,167,173)')]);
             break;
     }
 
@@ -3279,7 +3324,7 @@ function plotLeftSideOfResume(svg) {
         .attr("y", nameYAxis + 30)
         .attr("text-anchor", "middle")
         .attr("class", "jdFormat")
-        .text("CRM Consultant");
+        .text("Senior Software Engineer");
 
     svg.append("image")
         .attr("xlink:href", "media/img/linkedin.png")
@@ -3363,8 +3408,8 @@ function plotLeftSideOfResume(svg) {
 
     try {
 
-        currentLoc = new google.maps.LatLng(13.019282, 77.657083);
-        officeLoc = new google.maps.LatLng(13.044831, 77.622109);
+        currentLoc = new google.maps.LatLng(13.028954485548098, 77.66524292390666);
+        officeLoc = new google.maps.LatLng(12.984115518178086, 77.698646);
         //d3.select("#mapDiv").node()
         map = new google.maps.Map(document.getElementById("mapDiv"), {
             zoom: 8,
@@ -3440,11 +3485,11 @@ function plotLeftSideOfResume(svg) {
                 officerMarker.tooltipContent = 'My workplace...Click for details.';
 
                 var infoWindow = new google.maps.InfoWindow({
-                    content: '<font class="marker-content">303, 1st Block, <br>SMR Vinay Estate<br>Horamavu Main Road<br>Bangalore-560043</font>'
+                    content: '<font class="marker-content">5251, Tower 5, <br>Prestige Gulmohar<br>Kalkere Main Road<br>Bangalore-560043</font>'
                 });
 
                 var officeInfoWindow = new google.maps.InfoWindow({
-                    content: '<font class="marker-content">Microsoft Global Services Center (India) Private Limited<br>Embassy Manyata Business Park<br>E2 Block, Silver Oak, B-wing, 4th Floor,<br>Nagawara Outer Ring Road,<br>Bangalore 560045<br><br>Ph: +91 080 6758 3000<br>Fax: +91 080 6758 3456<br>Website: <a href="https://www.microsoft.com/india/globaldelivery/default.aspx" target="_blank">https://www.microsoft.com/india/globaldelivery/default.aspx</a></font>'
+                    content: '<font class="marker-content">Microsoft India (R&D) Private Limited.,<br>Luxor North Tower,<br>8th Floor Survey No 68, 69/1, 69/2 & 69/3, <br>Bagmane Capital, Bengaluru-560048<br>Ph: +91 080 6758 3000<br>Fax: +91 080 6758 3456<br></font>'
                 });
 
                 google.maps.event.addListener(marker, 'mouseover', function () {
